@@ -20,7 +20,7 @@ steps:
 - task: NuGetCommand@2
   displayName: Pack metapackage
   condition: eq(variables['buildTag'], False)
-   inputs:
+  inputs:
     command: 'pack'
     packagesToPack: 'src/Discord.Net/Discord.Net.nuspec'
     versioningScheme: 'off'
