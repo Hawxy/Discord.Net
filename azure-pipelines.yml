@@ -34,13 +34,7 @@ jobs:
   pool:
     vmImage: 'windows-2019'
   condition: |
-      and (
-        succeeded(),
-        or (
-          eq(variables['Build.SourceBranch'], 'refs/heads/dev'),
-          eq(variables['buildTag'], True)
-        )
-      )
+      succeeded()
   steps:
   - template: azure/build.yml
   - template: azure/deploy.yml
