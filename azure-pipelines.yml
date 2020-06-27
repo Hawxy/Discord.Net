@@ -16,8 +16,11 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   steps:
-  - script: dotnet build "Discord.Net.sln" -v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag)
-    displayName: Build projects
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: 'Discord.Net.sln'
+      arguments: '-v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag)'
 
   - script: dotnet test "test/Discord.Net.Tests.Unit/Discord.Net.Tests.Unit.csproj" --no-restore --no-build -v minimal -c $(buildConfiguration) --logger trx
     displayName: Unit Tests
