@@ -1,5 +1,7 @@
 variables:
   buildConfiguration: Release
+  buildTag: $[ startsWith(variables['Build.SourceBranch'], 'refs/tags') ]
+  buildNumber: $[ variables['Build.BuildNumber'] ]
 
 trigger:
   tags:
@@ -10,19 +12,10 @@ trigger:
     - '*'
 
 jobs:
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - task: UseDotNet@2
-    displayName: 'Use .NET Core sdk'
-    inputs:
-      packageType: 'sdk'
-      version: '3.x'
-  - template: azure/build.yml
-
 - job: Windows_build
   pool:
     vmImage: 'windows-latest'
   steps:
   - template: azure/build.yml
+
+
