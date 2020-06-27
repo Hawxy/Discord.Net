@@ -1,8 +1,5 @@
 steps:
-- script: dotnet restore Discord.Net.sln
-  displayName: Restore packages
-
-- script: dotnet build "Discord.Net.sln" --no-restore -v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag)
+- script: dotnet build "Discord.Net.sln" -v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag)
   displayName: Build projects
 
 - script: dotnet test "test/Discord.Net.Tests.Unit/Discord.Net.Tests.Unit.csproj" --no-restore --no-build -v minimal -c $(buildConfiguration) --logger trx
