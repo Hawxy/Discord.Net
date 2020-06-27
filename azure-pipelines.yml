@@ -1,7 +1,5 @@
 variables:
   buildConfiguration: Release
-  buildTag: $[ startsWith(variables['Build.SourceBranch'], 'refs/tags') ]
-  buildNumber: $[ variables['Build.BuildNumber'] ]
 
 trigger:
   tags:
@@ -14,7 +12,7 @@ trigger:
 jobs:
 - job: Linux
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-latest'
   steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk'
@@ -25,23 +23,7 @@ jobs:
 
 - job: Windows_build
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-latest'
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/dev')
   steps:
   - template: azure/build.yml
-
-- job: Windows_deploy
-  pool:
-    vmImage: 'windows-2019'
-  condition: |
-      and (
-        succeeded(),
-        or (
-          eq(variables['Build.SourceBranch'], 'refs/heads/dev'),
-          eq(variables['buildTag'], True)
-        )
-      )
-  steps:
-  - template: azure/build.yml
-  - template: azure/deploy.yml
-  - template: azure/docs.yml
