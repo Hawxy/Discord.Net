@@ -12,27 +12,18 @@ trigger:
     - '*'
 
 jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: azure/build.yml
+
 - job: Windows_build
   pool:
     vmImage: 'windows-latest'
+  condition: ne(variables['Build.SourceBranch'], 'refs/heads/dev')
   steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'restore'
-      projects: 'Discord.Net.sln'
-      feedsToUse: 'select'
-      verbosityRestore: 'Minimal'
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'build'
-      projects: 'Discord.Net.sln'
-      arguments: '-v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag) --no-restore'
-
-  - script: dotnet test "test/Discord.Net.Tests.Unit/Discord.Net.Tests.Unit.csproj" --no-restore --no-build -v minimal -c $(buildConfiguration) --logger trx
-    displayName: Unit Tests
-
-  - script: dotnet test "test/Discord.Net.Analyzers.Tests/Discord.Net.Analyzers.Tests.csproj" --no-restore --no-build -v minimal -c $(buildConfiguration) --logger trx
-    displayName: Analyzer Tests
+  - template: azure/build.yml
 
 
 
