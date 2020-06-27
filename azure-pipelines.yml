@@ -16,15 +16,17 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   steps:
-  - task: UseDotNet@2
+  - task: DotNetCoreCLI@2
     inputs:
-      packageType: 'sdk'
-      version: '3.x'
+      command: 'restore'
+      projects: 'Discord.Net.sln'
+      feedsToUse: 'select'
+      verbosityRestore: 'Minimal'
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
       projects: 'Discord.Net.sln'
-      arguments: '-v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag)'
+      arguments: '-v minimal -c $(buildConfiguration) /p:BuildNumber=$(buildNumber) /p:IsTagBuild=$(buildTag) --no-restore'
 
   - script: dotnet test "test/Discord.Net.Tests.Unit/Discord.Net.Tests.Unit.csproj" --no-restore --no-build -v minimal -c $(buildConfiguration) --logger trx
     displayName: Unit Tests
