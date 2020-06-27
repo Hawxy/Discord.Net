@@ -21,7 +21,6 @@ jobs:
 - job: Windows_build
   pool:
     vmImage: 'windows-latest'
-  condition: ne(variables['Build.SourceBranch'], 'refs/heads/dev')
   steps:
   - template: azure/build.yml
 
